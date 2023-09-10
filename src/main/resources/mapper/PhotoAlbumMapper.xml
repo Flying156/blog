@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fly.mapper.PhotoAlbumMapper">
+
+
+    <select id="listAdminPhotoAlbums" resultType="com.fly.dto.photoAlbum.AlbumMangeDTO">
+        SELECT photo_album.id, photo_album.album_name, photo_album.album_desc, photo_album.album_cover,
+        COUNT(photo.id) photo_count, photo_album.`status`
+        FROM
+        (SELECT id, album_name, album_desc, album_cover, `status`
+        FROM tb_photo_album
+        WHERE is_delete = 0
+        <if test="keywords != null">
+            AND album_name LIKE CONCAT('%', #{keywords}, '%')
+        </if>
+        ORDER BY id DESC
+        LIMIT #{offset}, #{size}
+        ) photo_album
+        LEFT JOIN
+        (SELECT id, album_id
+        FROM tb_photo
+        WHERE is_delete = 0) photo
+        ON photo_album.id = photo.album_id
+        GROUP BY photo_album.id
+    </select>
+
+</mapper>

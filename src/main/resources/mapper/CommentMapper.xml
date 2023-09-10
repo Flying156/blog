@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fly.mapper.CommentMapper">
+
+
+    <select id="countAdminComments" resultType="java.lang.Long">
+        SELECT COUNT(*) FROM tb_comment comment
+        LEFT JOIN tb_user_info user_info ON `comment`.user_id = user_info.id
+        <where>
+            <if test="commentSearchVO.type != null">
+                `comment`.type =#{commentSearchVO.type}
+            </if>
+            <if test="commentSearchVO.isReview != null">
+                AND `comment`.is_review = #{commentSearchVO.isReview}
+            </if>
+            <if test="commentSearchVO.keywords != null">
+                AND user_info.nickname LIKE CONCAT('%', #{conditionVO.keywords}, '%')
+            </if>
+        </where>
+    </select>
+
+    <select id="listAdminComments" resultType="com.fly.dto.comment.CommentAdminDTO">
+        SELECT `comment`.id, tb_user_info.avatar, tb_user_info.nickname,
+               reply_info.id reply_nickname, tb_article.article_title,
+               `comment`.comment_content, `comment`.type, `comment`.is_review,
+               `comment`.create_time FROM tb_comment comment
+        LEFT JOIN tb_article on comment.topic_id = tb_article.id
+        LEFT JOIN tb_user_info ON comment.user_id = tb_user_info.id
+        LEFT JOIN tb_user_info reply_info ON comment.reply_user_id = reply_info.id
+        <where>
+            <if test="commentSearchVO.type != null">
+                `comment`.type =#{commentSearchVO.type}
+            </if>
+            <if test="commentSearchVO.isReview != null">
+                `comment`.is_review = #{commentSearchVO.isReview}
+            </if>
+            <if test="commentSearchVO.keywords != null">
+                user_info.nickname LIKE CONCAT('%', #{commentSearchVO.keywords}, '%')
+            </if>
+        </where>
+        ORDER BY `comment`.id DESC
+        LIMIT #{offset}, #{size}
+    </select>
+
+    <select id="listComments" resultType="com.fly.dto.comment.CommentDTO">
+        SELECT comment.id,  comment.user_id, user_info.nickname, user_info.avatar, user_info.web_site,
+        comment.comment_content, comment.create_time FROM tb_comment comment
+        LEFT JOIN tb_user_info user_info ON comment.user_id = user_info.id
+        <where>
+            <if test="viewCommentVO.topicId != null">
+                `comment`.topic_id = #{viewCommentVO.topicId}
+            </if>
+            AND `comment`.type = #{viewCommentVO.type}
+            AND `comment`.is_review = 1
+            AND parent_id IS NULL
+        </where>
+        ORDER BY `comment`.id DESC
+        LIMIT #{offset}, #{size}
+    </select>
+
+    <select id="listReplayCount" resultType="com.fly.dto.comment.ReplyCountDTO">
+        select comment.parent_id AS comment_id, COUNT(*) AS reply_count
+        from tb_comment comment
+        where comment.parent_id IN
+            <foreach collection="commentIdList" item="commentId" separator="," open="(" close=")">
+                #{commentId}
+            </foreach>
+        GROUP BY comment.parent_id
+    </select>
+
+    <select id="listReplies" resultType="com.fly.dto.comment.ReplyDTO">
+        SELECT * FROM (
+            SELECT `comment`.id,
+                    `comment`.parent_id,
+                    `comment`.user_id,
+                    user_info.nickname,
+                    user_info.avatar,
+                    user_info.web_site,
+                    `comment`.reply_user_id,
+                    reply_user_info.nickname AS reply_nickname,
+                    reply_user_info.web_site AS reply_web_site,
+                    `comment`.comment_content,
+                    `comment`.create_time,
+                    # 通过 parent_id 分组，然后在每个组内对创建时间进行升序排序
+        ROW_NUMBER() over (PARTITION BY comment.parent_id ORDER BY comment.create_time) AS row_num
+        from tb_comment comment
+                   JOIN tb_user_info user_info ON comment.user_id = user_info.id
+                   JOIN tb_user_info reply_user_info ON comment.reply_user_id = reply_user_info.id
+                   WHERE comment.is_review = 1
+                   AND comment.parent_id IN
+                   <foreach collection="commentIdList" item="commentId" separator="," open="(" close=")">
+                       #{commentId}
+                   </foreach> ) main
+        WHERE 4 > main.row_num
+    </select>
+    <select id="getTopicIdAndCommentsCount" resultType="com.fly.dto.comment.CommentCountDTO">
+        SELECT comment.topic_id, COUNT(*) comment_count
+        FROM tb_comment comment
+        WHERE topic_id IN
+        <foreach collection="talkIdList" item="talkId" separator="," open="(" close=")">
+            #{talkId}
+        </foreach>
+        AND parent_id IS NULL
+        group by topic_id
+    </select>
+
+
+</mapper>

@@ -1,0 +1,118 @@
+server:
+  port: 8081
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/blog
+    username: root
+    password: asdfzxcvqwer3579
+    driver-class-name: com.mysql.jdbc.Driver
+    hikari:
+      # 连接池空闲连接的最小数量
+      minimum-idle: 5
+      # 空闲连接存活最大时间，默认 600000（ 10 分钟）
+      idle-timeout: 180000
+      # 连接池最大连接数，默认是 10
+      maximum-pool-size: 10
+      # 此属性控制从池返回的连接的默认自动提交行为，默认值：true
+      auto-commit: true
+      # 连接池名称
+      pool-name: hikariDataSource
+      # 此属性控制池中连接的最长生命周期，值 0 表示无限生命周期，默认 1800000，即 30 分钟
+      max-lifetime: 1800000
+      # 数据库连接超时时间，默认 30 秒，即 30000
+      connection-timeout: 30000
+  redis:
+    host: 172.17.0.1
+    port: 6379
+    password: asdfzxcvqwer3579
+    database: 1
+
+  cache:
+    type: redis
+  session:
+    store-type: redis
+  mail:
+    host: smtp.163.com
+    port: 465
+    username: flybulleter@163.com
+    password: VGSUQVXFUQILYJQK
+    protocol: smtp
+    properties:
+      mail:
+        smtp:
+          ssl:
+            enable: true
+
+  rabbitmq:
+    username: guest
+    password: asdfzxcvqwer3579
+    virtual-host: /
+    port: 5672
+    publisher-confirm-type: correlated
+    publisher-returns: true
+    template:
+      mandatory: true
+    listener:
+      simple:
+        acknowledge-mode: manual
+    host: 172.17.0.1
+  elasticsearch:
+    uris: http://172.17.0.1:9200
+  servlet:
+    multipart:
+      max-request-size: 50MB # 单个文件最大值
+      max-file-size: 50MB # 总上传文件最大值
+      enabled: true
+
+
+mybatis-plus:
+  mapper-locations: classpath:mapper/*xml
+  configuration:
+    map-underscore-to-camel-case: true
+
+logging:
+  level:
+    com:
+      fly:
+        mapper: debug
+        service: info
+        controller: info
+
+blog:
+  session:
+    domain-name:
+
+  local:
+    access-url: "/home/ubuntu/markdown"
+    upload-url: "/home/ubuntu/markdown"
+  login:
+    qq:
+      app-id:
+  async-schedule:
+    # 核心线程数
+    core-pool-size: 4
+    # 保留再线程池中的核心线程数
+    schedule-pool-size: 1
+    # 线程最大数
+    max-pool-size: 12
+    # 空闲的线程存活时间
+    keep-alive-seconds: 60
+    # 队列大小
+    queue-capacity: 30
+    # 线程池在关闭时是否等待执行所有任务
+    await-for-tasks-to-complete-on-shutdown: true
+    # 线程池在关闭时应等待任务执行完成的最大秒数
+    await-termination-seconds: 30
+
+oss:
+  qiniu:
+    access-key: cAn_nBCUamxKiI2XAWQjLYImGOQIbpdZC-hoqcgB
+    secret-key: I5gMqydeqbIIncFxJJeCPO1pt4fFmkZ9Oyx-ikB7
+    # 存储空间名称
+    bucket: fly156-blog
+    # 存储空间域名
+    domain-of-bucket: http://rzc2i7vnp.hd-bkt.clouddn.com
+
+
+
+

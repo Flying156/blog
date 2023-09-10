@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fly.mapper.TagMapper">
+
+    <resultMap id="BaseResultMap" type="com.fly.entity.Tag">
+        <id property="id" column="id" jdbcType="INTEGER"/>
+        <result property="tagName" column="tag_name" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <select id="listAdminTags" resultType="com.fly.dto.tag.TagMangeDTO">
+        select tb_tag.id, tb_tag.tag_name, count(tb_article_tag.id) articleCount, tb_tag.create_time
+        from tb_tag left join tb_article_tag on tb_tag.id = tb_article_tag.tag_id
+        <where>
+            <if test="keywords != null">
+                tb_tag.tag_name LIKE CONCAT('%', #{keywords}, '%')
+            </if>
+        </where>
+        group by tb_tag.id
+        order by tb_tag.id desc
+        limit #{offset}, #{size}
+    </select>
+    <select id="listArticleTagNames" resultType="java.lang.String">
+        SELECT tag.tag_name
+        FROM tb_tag tag
+                 JOIN tb_article_tag article_tag ON tag.id = article_tag.tag_id
+        WHERE article_tag.article_id = #{articleId}
+    </select>
+
+
+</mapper>

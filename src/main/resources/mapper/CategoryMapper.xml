@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fly.mapper.CategoryMapper">
+
+    <resultMap id="BaseResultMap" type="com.fly.entity.Category">
+        <id property="id" column="id" jdbcType="INTEGER"/>
+        <result property="categoryName" column="category_name" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <select id="listCategories" resultType="com.fly.dto.category.CategoryDTO">
+        select tb_category.id, tb_category.category_name, count(*) as article_count
+        from tb_category
+            left join (SELECT id, category_id
+                                    FROM tb_article
+                                    WHERE is_delete = 0
+                                      AND `status` = 1) article
+        on tb_category.id = article.category_id
+        group by tb_category.id
+    </select>
+
+    <select id="listAdminCategories" resultType="com.fly.dto.category.CategoryMangeDTO">
+        select tb_category.id, tb_category.category_name, count(tb_article.id) article_count, tb_category.create_time
+        from tb_category left join tb_article on tb_category.id = tb_article.category_id
+        <where>
+            <if test="keywords != null">
+                tb_category.category_name like CONCAT('%', #{keywords}, '%')
+            </if>
+        </where>
+        group by tb_category.id
+        order by tb_category.id desc
+        limit #{offset}, #{size}
+    </select>
+
+
+</mapper>
