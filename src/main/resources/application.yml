@@ -1,11 +1,11 @@
 server:
-  port: 8081
+  port: 
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/blog
-    username: root
-    password: 123456
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    url:
+    username:
+    password: 
+    driver-class-name: com.mysql.jdbc.Driver
     hikari:
       # 连接池空闲连接的最小数量
       minimum-idle: 5
@@ -22,21 +22,21 @@ spring:
       # 数据库连接超时时间，默认 30 秒，即 30000
       connection-timeout: 30000
   redis:
-    host: 172.21.133.30
-    port: 6379
-    password: 123456
-    database: 1
+    host: 
+    port: 
+    password: 
+    database: 
 
   cache:
     type: redis
   session:
     store-type: redis
   mail:
-    host: smtp.163.com
-    port: 465
-    username: flybulleter@163.com
-    password: VGSUQVXFUQILYJQK
-    protocol: smtp
+    host: 
+    port: 
+    username: 
+    password: 
+    protocol: 
     properties:
       mail:
         smtp:
@@ -44,8 +44,8 @@ spring:
             enable: true
 
   rabbitmq:
-    username: guest
-    password: guest
+    username: 
+    password: 
     virtual-host: /
     port: 5672
     publisher-confirm-type: correlated
@@ -55,9 +55,9 @@ spring:
     listener:
       simple:
         acknowledge-mode: manual
-    host: localhost
+    host:
   elasticsearch:
-    uris: http://localhost:9200
+    uris: 
   servlet:
     multipart:
       max-request-size: 50MB # 单个文件最大值
@@ -77,32 +77,14 @@ logging:
         mapper: debug
         service: info
         controller: info
-# springdoc-openapi项目配置
-#springdoc:
-#  swagger-ui:
-#    path: /swagger-ui.html
-#    tags-sorter: alpha
-#    operations-sorter: alpha
-#  api-docs:
-#    path: /v3/api-docs
-#  group-configs:
-#    - group: 'default'
-#      paths-to-match: '/**'
-#      packages-to-scan: com.fly.controller
-#
-## knife4j的增强配置，不需要增强可以不配
-#knife4j:
-#  enable: true
-#  setting:
-#    language: zh_cn
 
 blog:
   session:
     domain-name:
 
   local:
-    access-url: "/home/ubuntu/markdown"
-    upload-url: "/home/ubuntu/markdown"
+    access-url: 
+    upload-url: 
   login:
     qq:
       app-id:
@@ -124,12 +106,12 @@ blog:
 
 oss:
   qiniu:
-    access-key: cAn_nBCUamxKiI2XAWQjLYImGOQIbpdZC-hoqcgB
-    secret-key: I5gMqydeqbIIncFxJJeCPO1pt4fFmkZ9Oyx-ikB7
+    access-key:
+    secret-key: 
     # 存储空间名称
-    bucket: fly156-blog
+    bucket:
     # 存储空间域名
-    domain-of-bucket: http://rzc2i7vnp.hd-bkt.clouddn.com
+    domain-of-bucket:
 
 
 
