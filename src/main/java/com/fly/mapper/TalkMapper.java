@@ -22,4 +22,11 @@ public interface TalkMapper extends BaseMapper<Talk> {
      * 前台列出所有的说说
      */
     List<TalkDTO> listTalks(long offset, long size);
+
+    /**
+     * 根据 ID 查询说说内容
+     * @param talkId 说说 ID
+     */
+    TalkDTO getById(Integer talkId);
+
 }

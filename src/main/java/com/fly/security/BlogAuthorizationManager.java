@@ -106,6 +106,7 @@ public class BlogAuthorizationManager implements AuthorizationManager<RequestAut
         } finally {
             ANONYMOUS.remove();
         }
+
         return new AuthorizationDecision(authorized);
     }
 

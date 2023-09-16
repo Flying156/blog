@@ -48,4 +48,17 @@ public interface TalkService extends IService<Talk> {
      * @return 说说列表
      */
     List<String> listHomePageTalks();
+
+    /**
+     * 点赞说说说
+     * @param talkId 说说 ID
+     */
+    void likeTalk(Integer talkId);
+
+    /**
+     * 点击查看说说内容
+     * @param talkId  说说 ID
+     * @return 数据
+     */
+    TalkDTO getTalk(Integer talkId);
 }

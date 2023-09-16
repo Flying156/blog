@@ -37,5 +37,15 @@
         LIMIT #{offset}, #{size}
     </select>
 
+    <select id="getById" resultType="com.fly.dto.talk.TalkDTO">
+        SELECT talk.id, user_info.nickname, user_info.avatar, talk.content, talk.images,
+               talk.is_top, talk.create_time
+        FROM tb_talk talk
+        JOIN tb_user_info user_info ON talk.user_id = user_info.id
+        WHERE talk.id = #{talkId}
+        AND talk.status = 1
+
+    </select>
+
 
 </mapper>

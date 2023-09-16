@@ -2,8 +2,8 @@ package com.fly.util;
 
 
 import com.fly.enums.ResultEnum;
-import com.sun.istack.internal.NotNull;
 import lombok.*;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.BeanUtils;
 
 import static com.fly.enums.ResultEnum.FAILURE;

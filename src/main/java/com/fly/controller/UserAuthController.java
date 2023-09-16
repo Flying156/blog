@@ -11,9 +11,9 @@ import com.fly.util.Result;
 import com.fly.vo.user.PasswordVO;
 import com.fly.vo.user.UserAuthVO;
 import com.fly.vo.user.UserSearchVO;
-import com.sun.istack.internal.NotNull;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 

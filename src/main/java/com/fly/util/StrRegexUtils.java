@@ -1,7 +1,7 @@
 package com.fly.util;
 
 import com.github.houbb.sensitive.word.bs.SensitiveWordBs;
-import com.sun.istack.internal.NotNull;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.regex.Pattern;

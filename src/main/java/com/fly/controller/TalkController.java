@@ -71,4 +71,18 @@ public class TalkController {
     public Result<List<String>> viewHomePageTalks(){
         return Result.ok(talkService.listHomePageTalks());
      }
+
+    @Operation(summary = "点赞说说")
+    @PostMapping("/talks/{talkId}/like")
+    public Result<?> likeTalk(@NotNull @PathVariable Integer talkId) {
+        talkService.likeTalk(talkId);
+        return Result.ok();
+    }
+
+    @Operation(summary = "点击查看一条说说")
+    @GetMapping("/talks/{talkId}")
+    public Result<TalkDTO> viewOneTalk(@NotNull @PathVariable Integer talkId) {
+
+        return Result.ok(talkService.getTalk(talkId));
+    }
 }

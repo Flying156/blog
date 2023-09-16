@@ -12,6 +12,7 @@ import com.fly.mapper.TalkMapper;
 import com.fly.service.TalkService;
 import com.fly.util.*;
 import com.fly.vo.talk.TalkVO;
+import net.dreamlu.mica.core.exception.ServiceException;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,7 @@ import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
@@ -28,6 +30,7 @@ import static com.fly.constant.CacheConst.TALK;
 import static com.fly.constant.DatabaseConst.LIMIT_10;
 import static com.fly.constant.GenericConst.*;
 import static com.fly.constant.RedisConst.TALK_LIKE_COUNT;
+import static com.fly.constant.RedisConst.TALK_LIKE_PREFIX;
 
 /**
  * @author Milk
@@ -131,5 +134,22 @@ public class TalkServiceImpl extends ServiceImpl<TalkMapper, Talk> implements Ta
                 .map(content -> StrRegexUtils.deleteTag(content.length() > TWO_HUNDRED ?
                         content.substring(ZERO, TWO_HUNDRED) : content))
                 .collect(Collectors.toList());
+    }
+
+
+    @Override
+    public TalkDTO getTalk(Integer talkId) {
+
+        TalkDTO talkDTO = Optional.ofNullable(baseMapper.getById(talkId))
+                .orElseThrow(() -> new ServiceException("说说不存在"));
+        // 包装数据
+        talkDTO.setLikeCount((Integer)RedisUtils.hGet(TALK_LIKE_COUNT, talkId.toString()));
+
+        return talkDTO;
+    }
+
+    @Override
+    public void likeTalk(Integer talkId) {
+        RedisUtils.likeOrUnlike(TALK_LIKE_PREFIX, TALK_LIKE_COUNT, talkId);
     }
 }

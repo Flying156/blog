@@ -1,6 +1,6 @@
 package com.fly.util;
 
-import com.sun.istack.internal.NotNull;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.BeanUtils;
 
 import javax.annotation.Nullable;
@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 /**
  * 转换工具类
+ * @author Milk
  */
 public abstract class ConvertUtils {
 
