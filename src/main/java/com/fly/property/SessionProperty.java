@@ -21,7 +21,7 @@ public class SessionProperty {
     /**
      * 域名（当前域名或更高级的域名，测试环境不要设置域名！）
      */
-    private String domainName = "http://flyingbullt.top";
+    private String domainName = "flyingbullt.top";
 
     /**
      * 会话作用域（默认为根目录）

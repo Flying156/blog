@@ -34,7 +34,8 @@ public class SpringSessionConfig {
         DefaultCookieSerializer serializer = new DefaultCookieSerializer();
         serializer.setCookieName(property.getCookieName());
         serializer.setCookieMaxAge(property.getCookieMaxAge());
-        // todo 环境配置好在搞域名
+        // 环境配置好在搞域名
+        serializer.setDomainName(property.getDomainName());
         serializer.setCookiePath(property.getCookiePath());
         return serializer;
     }
